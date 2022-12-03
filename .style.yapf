@@ -1,0 +1,10 @@
+[style]
+based_on_style=pep8
+column_limit=79
+split_before_arithmetic_operator=true
+split_before_logical_operator=true
+split_before_named_assigns=true
+split_before_first_argument=true
+dedent_closing_brackets=true
+allow_split_before_dict_value=false
+split_all_comma_separated_values=true
