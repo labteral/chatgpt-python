@@ -1,9 +1,13 @@
-# python-package
-Python Package Boilerplate
-
 ## Usage
+```python
+from chatgpt import Conversation
+
+conversation = Conversation()
+print(conversation.chat("Hello."))
 ```
-git clone https://github.com/brunneis/python-package
-cd python-package
-./rename.sh
-```
+
+
+## Store the credentials
+1. Login into https://chat.openai.com/chat
+2. Paste the code at `./chatgpt/interceptor.js` in the browser console
+3. Store the JSON in a file called `config.json`
