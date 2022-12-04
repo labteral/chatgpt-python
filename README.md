@@ -1,6 +1,6 @@
 ## Get the credentials
 1. Login into https://chat.openai.com/chat with your browser
-2. Paste the content of [interceptor.js](/labteral/chatgpt-python/blob/master/chatgpt/interceptor.js) in the browser console
+2. Paste the content of [interceptor.js](/chatgpt/interceptor.js) in the browser console
 3. Store the JSON in a file called `config.json`
 
 
