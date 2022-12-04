@@ -9,6 +9,10 @@
 ```bash
 chatgpt
 ```
+or
+```bash
+python -m chatgpt
+```
 ### SDK
 ```python
 from chatgpt import Conversation
