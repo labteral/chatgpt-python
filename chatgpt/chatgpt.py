@@ -29,7 +29,7 @@ class Conversation:
 
         if self._first_parent_message_id is None:
             self._first_parent_message_id = parent_message_id
-        self._message_id = parent_message_id
+        self._message_id = self._first_parent_message_id
 
     def load_config(self, config_path: str = None):
         if config_path is None:
