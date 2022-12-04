@@ -3,15 +3,15 @@
 
 from setuptools import setup
 from setuptools import find_packages
-import package_name
+import chatgpt
 
 setup(
-    name='package_name',
-    version=package_name.__version__,
-    description='description_value',
-    url='url_value',
-    author='author_value',
-    author_email='email_value',
+    name='chatgpt',
+    version=chatgpt.__version__,
+    description='',
+    url='https://github.com/brunneis/chatgpt-python',
+    author='Rodrigo Martínez Castaño',
+    author_email='rodrigo@martinez.gal',
     license='GNU General Public License v3 (GPLv3)',
     packages=find_packages(),
     zip_safe=False,
