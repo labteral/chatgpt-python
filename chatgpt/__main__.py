@@ -7,9 +7,11 @@ def main():
     conversation = Conversation()
 
     while True:
-        user_input = input("> ")
-        print(conversation.chat(user_input), end="\n\n")
+        message = input('> ')
+        if message.lower().strip() == 'exit':
+            break
+        print(conversation.chat(message), end='\n\n')
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
