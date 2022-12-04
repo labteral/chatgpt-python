@@ -26,5 +26,9 @@ setup(
         "Topic :: Software Development :: Libraries :: Python Modules",
     ],
     python_requires=">=3.6",
-    install_requires=['']
-)  # Dependencies
+    entry_points={
+        'console_scripts': [
+            'chatgpt = chatgpt.__main__:main',
+        ],
+    }
+)
