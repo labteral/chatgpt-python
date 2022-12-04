@@ -7,7 +7,7 @@
 ## Usage
 ### Interactive chat
 ```bash
-python -m chatgpt
+chatgpt
 ```
 ### SDK
 ```python
