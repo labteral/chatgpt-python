@@ -1,3 +1,8 @@
+## Install
+```bash
+pip install -U chatgpt
+```
+
 ## Get the credentials
 1. Login into https://chat.openai.com/chat with your browser
 2. Paste the content of [interceptor.js](/chatgpt/interceptor.js) in the browser console
