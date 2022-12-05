@@ -5,7 +5,7 @@
 </p>
 
 <h3 align="center">
-    <b>ChatGPT</b>
+    <b>ChatGPT Python SDK</b>
 </h3>
 
 <p align="center">
