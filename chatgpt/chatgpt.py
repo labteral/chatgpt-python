@@ -235,6 +235,12 @@ class Conversation:
         return session
 
     def login(self, email, password):
+        """Login to the openai and return the token
+
+        Args:
+            email (str): Email to login into openai chatgpt
+            password (str): Password to login into openai chatgpt
+        """        
         self._email = email
         self._password = password
         session_info = self._openai_authentication.login(email, password)
@@ -243,6 +249,8 @@ class Conversation:
         return session_info
 
     def get_session(self):
+        """Get chatgpt actual session
+        """        
         session_info = self._openai_authentication.get_session()
         self._access_token = session_info["accessToken"]
         return session_info
