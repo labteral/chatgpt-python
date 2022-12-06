@@ -294,6 +294,8 @@ class Conversation:
                 if self._email and self._password:
                     self.login(self._email, self._password)
                     return self.chat(message, False)
+            if ex.response.status_code == 403:
+                raise CallError(str(ex.response.content).split("h2>")[1].split("<")[0])
             error_message = json.loads(ex.response.text)['detail']
             raise CallError(error_message)
 
