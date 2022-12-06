@@ -1,15 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import json
+import time
 from typing import List
 import requests
 import tls_client
 
 import urllib.parse
 from requests import HTTPError
-from .errors import CallError
 from uuid import uuid4 as uuid
 from urllib.error import HTTPError as UrllibHTTPError
+from .errors import ChatgptError, ChatgptErrorCodes
 
 
 class OpenAIAuthentication():
@@ -44,9 +45,9 @@ class OpenAIAuthentication():
             response = self._request("GET", url)
         except UrllibHTTPError as e:
             if e.code == 302:
-                return str(e).split("state=")[1].split("\">")[0]
-            else:
-                raise e
+                if "state" in str(e):
+                    return str(e).split("state=")[1].split("\">")[0]
+            raise e
         raise UrllibHTTPError(url, 200, "Bad authorize request",
                               response.headers, None)
 
@@ -141,14 +142,16 @@ class OpenAIAuthentication():
         return response.cookies.get("__Secure-next-auth.session-token")
 
     def get_session(self):
-        response = self._request(
-            "GET", "https://chat.openai.com/api/auth/session", headers={
-                "If-None-Match": "\"bwc9mymkdm2\"",
-                "Host": "ask.openai.com",
-                "Referer": "https://chat.openai.com/chat",
-
-            })
-        return response.json()
+        try:
+            response = self._request(
+                "GET", "https://chat.openai.com/api/auth/session", headers={
+                    "Host": "ask.openai.com",
+                    "Referer": "https://chat.openai.com/chat",
+                })
+            return response.json()
+        except UrllibHTTPError as e:
+            raise ChatgptError(
+                "Error getting the session. You may have a wrong access token; try to login again or insert an access_token yourself.") from e
 
     def login(self, username, password):
         try:
@@ -161,9 +164,9 @@ class OpenAIAuthentication():
             new_state = self._request_login_password(state, username, password)
             self._request_authorize_access_token(state, new_state)
             return self.get_session()
-
         except UrllibHTTPError as err:
-            print(str(err))
+            raise ChatgptError("Login error. Try again or insert the token yourself.",
+                               ChatgptErrorCodes.LOGIN_ERROR) from err
 
 
 class Conversation:
@@ -174,21 +177,26 @@ class Conversation:
     _parent_message_id: str = None
     _email: str = None
     _password: str = None
-    _openai_authentication = None
+    _model_name: str = DEFAULT_MODEL_NAME
+    _openai_authentication: OpenAIAuthentication = None
 
     def __init__(
         self,
-        model_name: str = None,
         conversation_id: str = None,
         parent_message_id: str = None,
         access_token: str = None,
         config_path: str = None
     ):
+        """
+        Args:
+            conversation_id (str, optional): Conversation id with which the conversation starts. Defaults to None.
+            parent_message_id (str, optional): Parent id with which the conversation starts. Defaults to None.
+            access_token (str, optional): Access token used to authenticate into openai chatbot. Defaults to None.
+            config_path (str, optional): Configuration path from where information is going to be loaded. If a path is provided it will load the configuration into the attributes of Conversation. Defaults to None.
+        """
 
         if config_path is not None:
             self.load_config(config_path)
-
-        self._model_name = model_name or self.DEFAULT_MODEL_NAME
 
         if self._access_token is None:
             self._access_token = access_token
@@ -200,16 +208,31 @@ class Conversation:
             self._parent_message_id = parent_message_id
 
         self._message_id = self._parent_message_id
+        self._session = self._initialize_http_session()
         self._openai_authentication = OpenAIAuthentication()
 
-    def _remove_none_values(self, d):
+    def __remove_none_values(self, d):
         if not isinstance(d, dict):
             return d
         new_dict = {}
         for k, v in d.items():
             if v is not None:
-                new_dict[k] = self._remove_none_values(v)
+                new_dict[k] = self.__remove_none_values(v)
         return new_dict
+
+    def _initialize_http_session(self):
+        session = requests.Session()
+        session.headers = {
+            'Authorization': None,
+            'sec-ch-ua': '"Not?A_Brand";v="8", "Chromium";v="107", "Google Chrome";v="107"',
+            'sec-ch-ua-mobile': '?0',
+            'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36',
+            'Content-Type': 'application/json',
+            'accept': 'text/event-stream',
+            'X-OpenAI-Assistant-App-Id': '',
+            'sec-ch-ua-platform': '"Linux"'
+        }
+        return session
 
     def login(self, email, password):
         self._email = email
@@ -235,16 +258,21 @@ class Conversation:
             "email": None,
             "password": None,
         }
-        with open(config_path, 'r') as f:
-            config.update(json.load(f))
+        try:
+            with open(config_path, 'r') as f:
+                config.update(json.load(f))
+            self._access_token = config['access_token']
+            self._conversation_id = config['conversation_id']
+            self._parent_message_id = config['parent_message_id']
+            self._email = config['email']
+            self._password = config['password']
+            return config
 
-        self._access_token = config['access_token']
-        self._conversation_id = config['conversation_id']
-        self._parent_message_id = config['parent_message_id']
-        self._email = config['email']
-        self._password = config['password']
+        except Exception as e:
+            raise ChatgptError("Error loading the configuration file",
+                               ChatgptErrorCodes.CONFIG_FILE_ERROR) from e
 
-    def chat(self, message: List[str], retry_on_401=True):
+    def chat(self, message: List[str], retry_on_401: bool = True):
 
         if self._parent_message_id is None:
             self._parent_message_id = str(uuid())
@@ -254,20 +282,17 @@ class Conversation:
 
         if self._access_token is None and self._email and self._password:
             self.login(self._email, self._password)
+            time.sleep(1)
 
+        if self._access_token is None:
+            raise ChatgptError(
+                "Access token is not provided. Please, provide an access_token through the constructor, by loading the configuration file with a proper access_token or instead, you can provide an email and password.", ChatgptErrorCodes.INVALID_ACCESS_TOKEN)
+
+        self._session.headers["Authorization"] = "Bearer {}".format(
+            self._access_token)
         self._message_id = str(uuid())
+        
         url = "https://chat.openai.com/backend-api/conversation"
-
-        headers = {
-            'Authorization': "Bearer {}".format(self._access_token),
-            'sec-ch-ua': '"Not?A_Brand";v="8", "Chromium";v="107", "Google Chrome";v="107"',
-            'sec-ch-ua-mobile': '?0',
-            'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36',
-            'Content-Type': 'application/json',
-            'accept': 'text/event-stream',
-            'X-OpenAI-Assistant-App-Id': '',
-            'sec-ch-ua-platform': '"Linux"'
-        }
         payload = {
             "action": "next",
             "messages": [
@@ -284,10 +309,10 @@ class Conversation:
             "parent_message_id": self._parent_message_id,
             "model": self._model_name
         }
-        payload = self._remove_none_values(payload)
+        payload = self.__remove_none_values(payload)
         try:
-            response = requests.request(
-                "POST", url, headers=headers, json=payload)
+            response = self._session.request(
+                "POST", url, json=payload)
             response.raise_for_status()
             payload = response.text
             last_item = payload.split(('data:'))[-2]
@@ -300,16 +325,25 @@ class Conversation:
             return postprocessed_text
 
         except HTTPError as ex:
-            if retry_on_401 and ex.response.status_code in [401]:
+            error_message = "Unknown error"
+
+            if ex.response.status_code in [401]:
                 self._access_token = None
-                if self._email and self._password:
-                    self.login(self._email, self._password)
-                    return self.chat(message, False)
-            if ex.response.status_code == 403:
-                raise CallError(str(ex.response.content).split(
-                    "h2>")[1].split("<")[0])
-            error_message = json.loads(ex.response.text)['detail']
-            raise CallError(error_message)
+                if retry_on_401:
+                    if self._email and self._password:
+                        self.login(self._email, self._password)
+                        return self.chat(message, False)
+                raise ChatgptError(
+                    "Please, provide a new access_token through the constructor, by loading the configuration file with a proper access_token or instead, you can provide an email and password.", ChatgptErrorCodes.INVALID_ACCESS_TOKEN)
+
+            elif ex.response.status_code == 403:
+                error_message = str(ex.response.content).split(
+                    "h2>")[1].split("<")[0]
+            else:
+                error_message = json.loads(ex.response.text)['detail']
+
+            raise ChatgptError(
+                error_message, ChatgptErrorCodes.CHATGPT_API_ERROR)
 
     def reset(self):
         self._message_id = None
