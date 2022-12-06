@@ -1,6 +1,7 @@
 # Custom
 .dccache
 config.json
+.vscode
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -100,7 +101,6 @@ venv.bak/
 
 # Rope project settings
 .ropeproject
-
 # mkdocs documentation
 /site
 

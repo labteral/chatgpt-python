@@ -30,5 +30,8 @@ setup(
         'console_scripts': [
             'chatgpt = chatgpt.__main__:main',
         ],
-    }
+    },
+    install_requires=[
+        "tls_client"
+    ]
 )
