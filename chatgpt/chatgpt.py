@@ -142,7 +142,12 @@ class OpenAIAuthentication():
 
     def get_session(self):
         response = self._request(
-            "GET", "https://chat.openai.com/api/auth/session")
+            "GET", "https://chat.openai.com/api/auth/session", headers={
+                "If-None-Match": "\"bwc9mymkdm2\"",
+                "Host": "ask.openai.com",
+                "Referer": "https://chat.openai.com/chat",
+
+            })
         return response.json()
 
     def login(self, username, password):
@@ -252,8 +257,16 @@ class Conversation:
 
         self._message_id = str(uuid())
         url = "https://chat.openai.com/backend-api/conversation"
+
         headers = {
-            'Authorization': f'Bearer {self._access_token}',
+            'Authorization': "Bearer {}".format(self._access_token),
+            'sec-ch-ua': '"Not?A_Brand";v="8", "Chromium";v="107", "Google Chrome";v="107"',
+            'sec-ch-ua-mobile': '?0',
+            'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36',
+            'Content-Type': 'application/json',
+            'accept': 'text/event-stream',
+            'X-OpenAI-Assistant-App-Id': '',
+            'sec-ch-ua-platform': '"Linux"'
         }
         payload = {
             "action": "next",
@@ -271,12 +284,10 @@ class Conversation:
             "parent_message_id": self._parent_message_id,
             "model": self._model_name
         }
-
-        payload = json.dumps(self._remove_none_values(payload))
+        payload = self._remove_none_values(payload)
         try:
-
             response = requests.request(
-                "POST", url, headers=headers, data=payload)
+                "POST", url, headers=headers, json=payload)
             response.raise_for_status()
             payload = response.text
             last_item = payload.split(('data:'))[-2]
@@ -295,7 +306,8 @@ class Conversation:
                     self.login(self._email, self._password)
                     return self.chat(message, False)
             if ex.response.status_code == 403:
-                raise CallError(str(ex.response.content).split("h2>")[1].split("<")[0])
+                raise CallError(str(ex.response.content).split(
+                    "h2>")[1].split("<")[0])
             error_message = json.loads(ex.response.text)['detail']
             raise CallError(error_message)
 
