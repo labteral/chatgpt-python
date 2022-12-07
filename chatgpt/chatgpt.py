@@ -9,11 +9,15 @@ from typing import List
 from uuid import uuid4 as uuid
 from urllib.error import HTTPError
 from .errors import ChatgptError, ChatgptErrorCodes
+from tls_client.sessions import TLSClientExeption
 
 
 class HTTPSession:
-    def __init__(self):
-        self.session = tls_client.Session(client_identifier="chrome_107")
+    DEFAULT_TIMEOUT = 120
+
+    def __init__(self, timeout=DEFAULT_TIMEOUT):
+        self._session = tls_client.Session(client_identifier="chrome_107")
+        self._timeout = timeout
 
     def request(self, *args, headers={}, **kwargs):
         send_headers = {
@@ -26,8 +30,8 @@ class HTTPSession:
             "Referer": "https://chat.openai.com/"
         }
         send_headers.update(headers)
-        response = self.session.execute_request(
-            *args, headers=send_headers, timeout_seconds=120, **kwargs)
+        response = self._session.execute_request(
+            *args, headers=send_headers, timeout_seconds=self._timeout, **kwargs)
         if response.status_code == 200:
             return response
         else:
@@ -201,6 +205,7 @@ class Conversation:
         password: str = None,
         conversation_id: str = None,
         parent_message_id: str = None,
+        timeout:int = None
     ):
         """
         Args:
@@ -210,6 +215,7 @@ class Conversation:
             password (str): Password. Defaults to None.
             conversation_id (str, optional): Conversation id with which the conversation starts. Defaults to None.
             parent_message_id (str, optional): Parent id with which the conversation starts. Defaults to None.
+            timout (int, optional): Timeout duration in seconds.
         """
 
         if config_path is not None:
@@ -232,7 +238,7 @@ class Conversation:
         if self._parent_message_id is None:
             self._parent_message_id = parent_message_id
 
-        self._session = HTTPSession()
+        self._session = HTTPSession(timeout=timeout)
         self._openai_authentication = OpenAIAuthentication(self._session)
 
     def __remove_none_values(self, d):
@@ -335,8 +341,6 @@ class Conversation:
             "model": self._model_name
         }
         payload = json.dumps(self.__remove_none_values(payload))
-        exception_message = "Unknown error"
-        exception_code = ChatgptErrorCodes.UNKNOWN_ERROR
         try:
             response = self._session.request(
                 "POST", url, data=payload, headers={
@@ -355,7 +359,8 @@ class Conversation:
             return postprocessed_text
 
         except HTTPError as ex:
-
+            exception_message = "Unknown error"
+            exception_code = ChatgptErrorCodes.UNKNOWN_ERROR
             error_code = ex.code
             if error_code in [401, 409]:
                 self._access_token = None
@@ -379,8 +384,13 @@ class Conversation:
                 except ValueError as e:
                     exception_message = ex.msg
 
-        except Exception as ex:
+        except TLSClientExeption as ex:
             exception_message = str(ex)
+            exception_code = ChatgptErrorCodes.TIMEOUT_ERROR
+
+        except Exception as e:
+            exception_message = str(e)
+            exception_code = ChatgptErrorCodes.UNKNOWN_ERROR
 
         raise ChatgptError(
             exception_message, exception_code)
