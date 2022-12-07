@@ -10,8 +10,8 @@ setup(
     version=chatgpt.__version__,
     description='',
     url='https://github.com/brunneis/chatgpt-python',
-    author='Rodrigo Martínez Castaño',
-    author_email='rodrigo@martinez.gal',
+    author='Rodrigo Martínez Castaño, Alejandro Suárez',
+    author_email='rodrigo@martinez.gal, alejandrosuarez.eu@gmail.com',
     license='GNU General Public License v3 (GPLv3)',
     packages=find_packages(),
     zip_safe=False,
@@ -32,6 +32,7 @@ setup(
         ],
     },
     install_requires=[
-        "tls_client"
+        "tls_client",
+        "python_cli_generator"
     ]
 )
