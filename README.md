@@ -11,12 +11,15 @@
     <a href="https://www.buymeacoffee.com/brunneis" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="35px"></a>
 </p>
 
-## Install
+## Install or update
 ```bash
 pip install -U chatgpt
 ```
 
+
 ## Create a file with your credentials
+> :warning: &nbsp; Please, update the library. Note the change in the config file.
+
 Create the file `config.json` in your working directory: 
 
 ```json
