@@ -33,6 +33,5 @@ setup(
     },
     install_requires=[
         "tls_client",
-        "python_cli_generator"
     ]
 )
