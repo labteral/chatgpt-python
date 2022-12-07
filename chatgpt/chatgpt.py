@@ -27,7 +27,7 @@ class HTTPSession:
         }
         send_headers.update(headers)
         response = self.session.execute_request(
-            *args, headers=send_headers, **kwargs)
+            *args, headers=send_headers, timeout_seconds=120, **kwargs)
         if response.status_code == 200:
             return response
         else:
@@ -335,7 +335,8 @@ class Conversation:
             "model": self._model_name
         }
         payload = json.dumps(self.__remove_none_values(payload))
-
+        exception_message = "Unknown error"
+        exception_code = ChatgptErrorCodes.UNKNOWN_ERROR
         try:
             response = self._session.request(
                 "POST", url, data=payload, headers={
@@ -354,7 +355,7 @@ class Conversation:
             return postprocessed_text
 
         except HTTPError as ex:
-            error_message = "Unknown error"
+
             error_code = ex.code
             if error_code in [401, 409]:
                 self._access_token = None
@@ -362,25 +363,29 @@ class Conversation:
                     if self._email and self._password:
                         self.login(self._email, self._password)
                         return self.chat(message, False)
-                raise ChatgptError(
-                    "Please, provide a new access_token through the constructor, by loading the configuration file with a proper access_token or instead, you can provide an email and password.",
-                    ChatgptErrorCodes.INVALID_ACCESS_TOKEN)
+                exception_message = "Please, provide a new access_token through the constructor, by loading the configuration file with a proper access_token or instead, you can provide an email and password."
+                exception_code = ChatgptErrorCodes.INVALID_ACCESS_TOKEN
 
             elif error_code == 403:
-                error_message = str(ex.msg).split(
+                exception_message = str(ex.msg).split(
                     "h2>")[1].split("<")[0]
 
             elif error_code == 500:
-                error_message = ex.msg
+                exception_message = ex.msg
 
             else:
                 try:
-                    error_message = json.loads(ex.msg)["detail"]
+                    exception_message = json.loads(ex.msg)["detail"]
                 except ValueError as e:
-                    error_message = ex.msg
+                    exception_message = ex.msg
 
-            raise ChatgptError(
-                error_message, ChatgptErrorCodes.CHATGPT_API_ERROR)
+        except Exception as ex:
+            exception_message = str(ex)
+
+        raise ChatgptError(
+            exception_message, exception_code)
+        
+     
 
     def reset(self):
         self._message_id = None
