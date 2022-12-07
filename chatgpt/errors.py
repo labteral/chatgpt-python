@@ -10,6 +10,7 @@ class ChatgptErrorCodes(Enum):
     CONFIG_FILE_ERROR = "config_file_error"
     UNKNOWN_ERROR = "unknown_error"
     LOGIN_ERROR = "login_error"
+    TIMEOUT_ERROR = "timeout_error"
 
 class ChatgptError(Exception):
     """
