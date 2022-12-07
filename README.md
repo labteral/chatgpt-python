@@ -1,5 +1,4 @@
 <p align="center">
-    <a href="https://pepy.tech/project/chatgpt/"><img alt="Downloads" src="https://img.shields.io/badge/dynamic/json?style=flat-square&maxAge=3600&label=downloads&query=$.total_downloads&url=https://api.pepy.tech/api/projects/chatgpt"></a>
     <a href="https://pypi.python.org/pypi/chatgpt/"><img alt="PyPi" src="https://img.shields.io/pypi/v/chatgpt.svg?style=flat-square"></a>
     <a href="https://github.com/labteral/chatgpt-python/blob/master/LICENSE"><img alt="License" src="https://img.shields.io/github/license/labteral/chatgpt-python.svg?style=flat-square"></a>
 </p>
@@ -12,15 +11,23 @@
     <a href="https://www.buymeacoffee.com/brunneis" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="35px"></a>
 </p>
 
-## Install
+## Install or update
 ```bash
 pip install -U chatgpt
 ```
 
-## Get the credentials
-1. Login into https://chat.openai.com/chat with your browser
-2. Paste the content of [interceptor.js](/chatgpt/interceptor.js) in the browser console
-3. Store the JSON in a file called `config.json`
+
+## Create a file with your credentials
+> :warning: &nbsp; Please, update the library. Note the change in the config file.
+
+Create the file `config.json` in your working directory: 
+
+```json
+{
+    "email": "email@example.org",
+    "password": "xxx"
+}
+```
 
 
 ## Usage
@@ -49,5 +56,3 @@ print(conversation.chat("What's the color of the sky?"))
 conversation.reset()
 print(conversation.chat("What's the color of the sun?"))
 ```
-
-
