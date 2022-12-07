@@ -381,7 +381,7 @@ class Conversation:
             else:
                 try:
                     exception_message = json.loads(ex.msg)["detail"]
-                except ValueError as e:
+                except ValueError:
                     exception_message = ex.msg
 
         except TLSClientExeption as ex:
@@ -394,8 +394,6 @@ class Conversation:
 
         raise ChatgptError(
             exception_message, exception_code)
-        
-     
 
     def reset(self):
         self._message_id = None

@@ -7,9 +7,22 @@ def main():
     conversation = Conversation()
 
     while True:
-        message = input('> ')
-        if message.lower().strip() == 'exit':
+        message = input('> ').lower().strip()
+
+        if not message:
+            continue
+
+        if message == 'exit':
             break
+
+        elif message == 'reset':
+            conversation.reset()
+            continue
+
+        elif message == 'clear':
+            print('\033c', end='')
+            continue
+
         print(conversation.chat(message), end='\n\n')
 
 

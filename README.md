@@ -31,7 +31,8 @@ Create the file `config.json` in your working directory:
 
 
 ## Usage
-### Interactive chat
+### CLI
+You can launch the CLI with:
 ```bash
 chatgpt
 ```
@@ -39,6 +40,12 @@ or
 ```bash
 python -m chatgpt
 ```
+
+These are the available commands:
+- `reset`: forget the context of the current conversation.
+- `clear`: clear the terminal.
+- `exit`: exit the CLI.
+
 ### SDK
 ```python
 from chatgpt import Conversation
