@@ -13,7 +13,9 @@ from tls_client.sessions import TLSClientExeption
 
 
 class HTTPSession:
-    def __init__(self, timeout=30):
+    DEFAULT_TIMEOUT = 120
+
+    def __init__(self, timeout=DEFAULT_TIMEOUT):
         self._session = tls_client.Session(client_identifier="chrome_107")
         self._timeout = timeout
 
@@ -203,7 +205,7 @@ class Conversation:
         password: str = None,
         conversation_id: str = None,
         parent_message_id: str = None,
-        timeout:int = 30
+        timeout:int = None
     ):
         """
         Args:
