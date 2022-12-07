@@ -17,10 +17,15 @@
 pip install -U chatgpt
 ```
 
-## Get the credentials
-1. Login into https://chat.openai.com/chat with your browser
-2. Paste the content of [interceptor.js](/chatgpt/interceptor.js) in the browser console
-3. Store the JSON in a file called `config.json`
+## Create a file with your credentials
+Create the file `config.json` in your working directory: 
+
+```json
+{
+    "email": "email@example.org",
+    "password": "xxx"
+}
+```
 
 
 ## Usage
@@ -49,5 +54,3 @@ print(conversation.chat("What's the color of the sky?"))
 conversation.reset()
 print(conversation.chat("What's the color of the sun?"))
 ```
-
-
