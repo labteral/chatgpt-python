@@ -291,7 +291,7 @@ class Conversation:
 
     def write_config(self, config_path: Optional[str] = None):
         if config_path is None:
-            config_path = DEFAULT_CONFIG_PATH
+            config_path = self.DEFAULT_CONFIG_PATH
         self._config_path = config_path
         try:
             config = {
