@@ -5,7 +5,7 @@ import os
 import tls_client
 import urllib.parse
 
-from typing import List
+from typing import List, Optional
 from uuid import uuid4 as uuid
 from urllib.error import HTTPError
 from .errors import ChatgptError, ChatgptErrorCodes
@@ -289,7 +289,9 @@ class Conversation:
             raise ChatgptError("Error loading the configuration file in \"{}\"".format(self._config_path),
                                ChatgptErrorCodes.CONFIG_FILE_ERROR) from e
 
-    def write_config(self, config_path: str = DEFAULT_CONFIG_PATH):
+    def write_config(self, config_path: Optional[str] = None):
+        if config_path is None:
+            config_path = self.DEFAULT_CONFIG_PATH
         self._config_path = config_path
         try:
             config = {
