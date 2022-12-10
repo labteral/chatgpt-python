@@ -1,15 +1,12 @@
+<h1 align="center">ChatGPT Python SDK</h1>
+
+<br />
 <p align="center">
+    <a href="https://github.com/labteral/chatgpt-python/issues"><img alt="PyPi" src="https://img.shields.io/github/issues/labteral/chatgpt-python.svg?style=flat-square"></a>
     <a href="https://pypi.python.org/pypi/chatgpt/"><img alt="PyPi" src="https://img.shields.io/pypi/v/chatgpt.svg?style=flat-square"></a>
     <a href="https://github.com/labteral/chatgpt-python/blob/master/LICENSE"><img alt="License" src="https://img.shields.io/github/license/labteral/chatgpt-python.svg?style=flat-square"></a>
 </p>
 
-<h3 align="center">
-    <b>ChatGPT Python SDK</b>
-</h3>
-
-<p align="center">
-    <a href="https://www.buymeacoffee.com/brunneis" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="35px"></a>
-</p>
 
 ## Install or update
 ```bash
