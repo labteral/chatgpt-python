@@ -33,5 +33,6 @@ setup(
     },
     install_requires=[
         "tls_client",
+        "rich"
     ]
 )
