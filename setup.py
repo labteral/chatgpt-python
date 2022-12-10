@@ -28,7 +28,7 @@ setup(
     python_requires=">=3.6",
     entry_points={
         'console_scripts': [
-            'chatgpt = chatgpt.__main__:main',
+            'chatgpt = chatgpt.cli.__main__:main',
         ],
     },
     install_requires=[
