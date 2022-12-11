@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>chatgpt package &mdash; ChatGPT Python SDK  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> ChatGPT Python SDK
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">chatgpt package</a><ul>
+<li><a class="reference internal" href="#subpackages">Subpackages</a></li>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-chatgpt.authentication">chatgpt.authentication module</a></li>
+<li><a class="reference internal" href="#module-chatgpt.chatgpt">chatgpt.chatgpt module</a></li>
+<li><a class="reference internal" href="#module-chatgpt.errors">chatgpt.errors module</a></li>
+<li><a class="reference internal" href="#module-chatgpt.sessions">chatgpt.sessions module</a></li>
+<li><a class="reference internal" href="#module-chatgpt.utils">chatgpt.utils module</a></li>
+<li><a class="reference internal" href="#module-chatgpt">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ChatGPT Python SDK</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active">chatgpt package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/chatgpt.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="chatgpt-package">
+<h1>chatgpt package<a class="headerlink" href="#chatgpt-package" title="Permalink to this heading"></a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="chatgpt.cli.html">chatgpt.cli package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="chatgpt.cli.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chatgpt.cli.html#module-chatgpt.cli.custom_rich">chatgpt.cli.custom_rich module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chatgpt.cli.html#module-chatgpt.cli">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
+</section>
+<section id="module-chatgpt.authentication">
+<span id="chatgpt-authentication-module"></span><h2>chatgpt.authentication module<a class="headerlink" href="#module-chatgpt.authentication" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="chatgpt.authentication.OpenAIAuthentication">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">chatgpt.authentication.</span></span><span class="sig-name descname"><span class="pre">OpenAIAuthentication</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#chatgpt.sessions.HTTPTLSSession" title="chatgpt.sessions.HTTPTLSSession"><span class="pre">HTTPTLSSession</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/chatgpt/authentication.html#OpenAIAuthentication"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chatgpt.authentication.OpenAIAuthentication" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="chatgpt.authentication.OpenAIAuthentication.get_session">
+<span class="sig-name descname"><span class="pre">get_session</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/chatgpt/authentication.html#OpenAIAuthentication.get_session"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chatgpt.authentication.OpenAIAuthentication.get_session" title="Permalink to this definition"></a></dt>
+<dd><p>Get the actual gpt session.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chatgpt.authentication.OpenAIAuthentication.login">
+<span class="sig-name descname"><span class="pre">login</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">username</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/chatgpt/authentication.html#OpenAIAuthentication.login"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chatgpt.authentication.OpenAIAuthentication.login" title="Permalink to this definition"></a></dt>
+<dd><p>Get the access token for chatgpt</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>username</strong> (<em>str</em>) – Email for chatgpt</p></li>
+<li><p><strong>password</strong> (<em>str</em>) – Password for chatgpt</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-chatgpt.chatgpt">
+<span id="chatgpt-chatgpt-module"></span><h2>chatgpt.chatgpt module<a class="headerlink" href="#module-chatgpt.chatgpt" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="chatgpt.chatgpt.Conversation">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">chatgpt.chatgpt.</span></span><span class="sig-name descname"><span class="pre">Conversation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">access_token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">access_token_seconds_to_expire</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">email</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conversation_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent_message_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proxy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache_file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/chatgpt/chatgpt.html#Conversation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chatgpt.chatgpt.Conversation" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="chatgpt.chatgpt.Conversation.DEFAULT_ACCESS_TOKEN_SECONDS_TO_EXPIRE">
+<span class="sig-name descname"><span class="pre">DEFAULT_ACCESS_TOKEN_SECONDS_TO_EXPIRE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1800</span></em><a class="headerlink" href="#chatgpt.chatgpt.Conversation.DEFAULT_ACCESS_TOKEN_SECONDS_TO_EXPIRE" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="chatgpt.chatgpt.Conversation.DEFAULT_CACHE_PATH">
+<span class="sig-name descname"><span class="pre">DEFAULT_CACHE_PATH</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'.chatgpt'</span></em><a class="headerlink" href="#chatgpt.chatgpt.Conversation.DEFAULT_CACHE_PATH" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="chatgpt.chatgpt.Conversation.DEFAULT_CONFIG_PATH">
+<span class="sig-name descname"><span class="pre">DEFAULT_CONFIG_PATH</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'config.json'</span></em><a class="headerlink" href="#chatgpt.chatgpt.Conversation.DEFAULT_CONFIG_PATH" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="chatgpt.chatgpt.Conversation.DEFAULT_ENVIRONMENT_CHATGPT_HOME">
+<span class="sig-name descname"><span class="pre">DEFAULT_ENVIRONMENT_CHATGPT_HOME</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'CHATGPT_HOME'</span></em><a class="headerlink" href="#chatgpt.chatgpt.Conversation.DEFAULT_ENVIRONMENT_CHATGPT_HOME" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="chatgpt.chatgpt.Conversation.DEFAULT_MODEL_NAME">
+<span class="sig-name descname"><span class="pre">DEFAULT_MODEL_NAME</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'text-davinci-002-render'</span></em><a class="headerlink" href="#chatgpt.chatgpt.Conversation.DEFAULT_MODEL_NAME" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chatgpt.chatgpt.Conversation.chat">
+<span class="sig-name descname"><span class="pre">chat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">retry_on_401</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direct_response</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stream</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/chatgpt/chatgpt.html#Conversation.chat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chatgpt.chatgpt.Conversation.chat" title="Permalink to this definition"></a></dt>
+<dd><p>Send a message and wait for the server to fully answer to return the message.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>message</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – Message or list of messages to send to the server.</p></li>
+<li><p><strong>retry_on_401</strong> (<em>bool</em><em>, </em><em>optional</em>) – Retry login if it fails. Defaults to True.</p></li>
+<li><p><strong>direct_response</strong> (<em>bool</em><em>, </em><em>optional</em>) – Return the response of request instead of the parsed message. Defaults to False.</p></li>
+<li><p><strong>stream</strong> (<em>bool</em><em>, </em><em>optional</em>) – Execute chat with stream. Note that you will be better off by using stream since it does the processing for you. Defaults to False.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chatgpt.chatgpt.Conversation.clean_auth">
+<span class="sig-name descname"><span class="pre">clean_auth</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/chatgpt/chatgpt.html#Conversation.clean_auth"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chatgpt.chatgpt.Conversation.clean_auth" title="Permalink to this definition"></a></dt>
+<dd><p>Clean the current authentication information</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chatgpt.chatgpt.Conversation.get_session">
+<span class="sig-name descname"><span class="pre">get_session</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/chatgpt/chatgpt.html#Conversation.get_session"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chatgpt.chatgpt.Conversation.get_session" title="Permalink to this definition"></a></dt>
+<dd><p>Get chatgpt actual session</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chatgpt.chatgpt.Conversation.load_config">
+<span class="sig-name descname"><span class="pre">load_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'config.json'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/chatgpt/chatgpt.html#Conversation.load_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chatgpt.chatgpt.Conversation.load_config" title="Permalink to this definition"></a></dt>
+<dd><p>Load Conversation attributes by reading from a file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>config_path</strong> (<em>str</em><em>, </em><em>optional</em>) – Name of the file from where to read attributes from. Defaults to config.json.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chatgpt.chatgpt.Conversation.login">
+<span class="sig-name descname"><span class="pre">login</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">email</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/chatgpt/chatgpt.html#Conversation.login"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chatgpt.chatgpt.Conversation.login" title="Permalink to this definition"></a></dt>
+<dd><p>Login to the openai and return the token</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>email</strong> (<em>str</em>) – Email to login into openai chatgpt</p></li>
+<li><p><strong>password</strong> (<em>str</em>) – Password to login into openai chatgpt</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chatgpt.chatgpt.Conversation.reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/chatgpt/chatgpt.html#Conversation.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chatgpt.chatgpt.Conversation.reset" title="Permalink to this definition"></a></dt>
+<dd><p>Reset the conversation</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chatgpt.chatgpt.Conversation.stream">
+<span class="sig-name descname"><span class="pre">stream</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">retry_on_401</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">only_new_characters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/chatgpt/chatgpt.html#Conversation.stream"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chatgpt.chatgpt.Conversation.stream" title="Permalink to this definition"></a></dt>
+<dd><p>Generator that allows you to retrieve messages as you are receiving them.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>message</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – Message or list of messages to send to the server.</p></li>
+<li><p><strong>retry_on_401</strong> (<em>bool</em><em>, </em><em>optional</em>) – Retry login if it fails. Defaults to True.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Yields</dt>
+<dd class="field-even"><p><em>str</em> – The text of the message as you are receiving it.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chatgpt.chatgpt.Conversation.write_cache">
+<span class="sig-name descname"><span class="pre">write_cache</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cache_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/chatgpt/chatgpt.html#Conversation.write_cache"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chatgpt.chatgpt.Conversation.write_cache" title="Permalink to this definition"></a></dt>
+<dd><p>Write the conversation attributes inside a file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>cache_path</strong> (<em>str</em><em>, </em><em>optional</em>) – Path where to write the data for caching purposes. Defaults to .chatgpt.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-chatgpt.errors">
+<span id="chatgpt-errors-module"></span><h2>chatgpt.errors module<a class="headerlink" href="#module-chatgpt.errors" title="Permalink to this heading"></a></h2>
+<dl class="py exception">
+<dt class="sig sig-object py" id="chatgpt.errors.ChatgptError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">chatgpt.errors.</span></span><span class="sig-name descname"><span class="pre">ChatgptError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">code</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">ChatgptErrorCodes.UNKNOWN_ERROR</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/chatgpt/errors.html#ChatgptError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chatgpt.errors.ChatgptError" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>Base class for exceptions raised by the Chatgpt API.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="chatgpt.errors.ChatgptErrorCodes">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">chatgpt.errors.</span></span><span class="sig-name descname"><span class="pre">ChatgptErrorCodes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/chatgpt/errors.html#ChatgptErrorCodes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chatgpt.errors.ChatgptErrorCodes" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<p>Error codes returned by the API.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="chatgpt.errors.ChatgptErrorCodes.CHATGPT_API_ERROR">
+<span class="sig-name descname"><span class="pre">CHATGPT_API_ERROR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'chat_gpt_api_error'</span></em><a class="headerlink" href="#chatgpt.errors.ChatgptErrorCodes.CHATGPT_API_ERROR" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="chatgpt.errors.ChatgptErrorCodes.CONFIG_FILE_ERROR">
+<span class="sig-name descname"><span class="pre">CONFIG_FILE_ERROR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'config_file_error'</span></em><a class="headerlink" href="#chatgpt.errors.ChatgptErrorCodes.CONFIG_FILE_ERROR" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="chatgpt.errors.ChatgptErrorCodes.CONNECTION_ERROR">
+<span class="sig-name descname"><span class="pre">CONNECTION_ERROR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'connection_error'</span></em><a class="headerlink" href="#chatgpt.errors.ChatgptErrorCodes.CONNECTION_ERROR" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="chatgpt.errors.ChatgptErrorCodes.INVALID_ACCESS_TOKEN">
+<span class="sig-name descname"><span class="pre">INVALID_ACCESS_TOKEN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'invalid_access_token'</span></em><a class="headerlink" href="#chatgpt.errors.ChatgptErrorCodes.INVALID_ACCESS_TOKEN" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="chatgpt.errors.ChatgptErrorCodes.LOGIN_ERROR">
+<span class="sig-name descname"><span class="pre">LOGIN_ERROR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'login_error'</span></em><a class="headerlink" href="#chatgpt.errors.ChatgptErrorCodes.LOGIN_ERROR" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="chatgpt.errors.ChatgptErrorCodes.TIMEOUT_ERROR">
+<span class="sig-name descname"><span class="pre">TIMEOUT_ERROR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'timeout_error'</span></em><a class="headerlink" href="#chatgpt.errors.ChatgptErrorCodes.TIMEOUT_ERROR" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="chatgpt.errors.ChatgptErrorCodes.UNKNOWN_ERROR">
+<span class="sig-name descname"><span class="pre">UNKNOWN_ERROR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'unknown_error'</span></em><a class="headerlink" href="#chatgpt.errors.ChatgptErrorCodes.UNKNOWN_ERROR" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-chatgpt.sessions">
+<span id="chatgpt-sessions-module"></span><h2>chatgpt.sessions module<a class="headerlink" href="#module-chatgpt.sessions" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="chatgpt.sessions.HTTPSession">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">chatgpt.sessions.</span></span><span class="sig-name descname"><span class="pre">HTTPSession</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proxy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cookies</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stream</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/chatgpt/sessions.html#HTTPSession"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chatgpt.sessions.HTTPSession" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#chatgpt.sessions.HTTPSessionBase" title="chatgpt.sessions.HTTPSessionBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">HTTPSessionBase</span></code></a></p>
+<dl class="py property">
+<dt class="sig sig-object py" id="chatgpt.sessions.HTTPSession.cookies">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cookies</span></span><a class="headerlink" href="#chatgpt.sessions.HTTPSession.cookies" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="chatgpt.sessions.HTTPSession.headers">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">headers</span></span><a class="headerlink" href="#chatgpt.sessions.HTTPSession.headers" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chatgpt.sessions.HTTPSession.request">
+<span class="sig-name descname"><span class="pre">request</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stream</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/chatgpt/sessions.html#HTTPSession.request"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chatgpt.sessions.HTTPSession.request" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="chatgpt.sessions.HTTPSessionBase">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">chatgpt.sessions.</span></span><span class="sig-name descname"><span class="pre">HTTPSessionBase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">300</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proxy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cookies</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/chatgpt/sessions.html#HTTPSessionBase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chatgpt.sessions.HTTPSessionBase" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="chatgpt.sessions.HTTPSessionBase.DEFAULT_HEADERS">
+<span class="sig-name descname"><span class="pre">DEFAULT_HEADERS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'Accept':</span> <span class="pre">'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',</span> <span class="pre">'Accept-Language':</span> <span class="pre">'en-US,en;q=0.5',</span> <span class="pre">'User-Agent':</span> <span class="pre">'Mozilla/5.0</span> <span class="pre">(X11;</span> <span class="pre">Linux</span> <span class="pre">x86_64)</span> <span class="pre">AppleWebKit/537.36</span> <span class="pre">(KHTML,</span> <span class="pre">like</span> <span class="pre">Gecko)</span> <span class="pre">Chrome/107.0.0.0</span> <span class="pre">Safari/537.36',</span> <span class="pre">'sec-ch-ua':</span> <span class="pre">'&quot;Not?A_Brand&quot;;v=&quot;8&quot;,</span> <span class="pre">&quot;Chromium&quot;;v=&quot;107&quot;,</span> <span class="pre">&quot;Google</span> <span class="pre">Chrome&quot;;v=&quot;107&quot;',</span> <span class="pre">'sec-ch-ua-mobile':</span> <span class="pre">'?0',</span> <span class="pre">'sec-ch-ua-platform':</span> <span class="pre">'&quot;Linux&quot;'}</span></em><a class="headerlink" href="#chatgpt.sessions.HTTPSessionBase.DEFAULT_HEADERS" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="chatgpt.sessions.HTTPSessionBase.DEFAULT_TIMEOUT">
+<span class="sig-name descname"><span class="pre">DEFAULT_TIMEOUT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">300</span></em><a class="headerlink" href="#chatgpt.sessions.HTTPSessionBase.DEFAULT_TIMEOUT" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="chatgpt.sessions.HTTPTLSSession">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">chatgpt.sessions.</span></span><span class="sig-name descname"><span class="pre">HTTPTLSSession</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proxy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cookies</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">headers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/chatgpt/sessions.html#HTTPTLSSession"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chatgpt.sessions.HTTPTLSSession" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#chatgpt.sessions.HTTPSessionBase" title="chatgpt.sessions.HTTPSessionBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">HTTPSessionBase</span></code></a></p>
+<dl class="py property">
+<dt class="sig sig-object py" id="chatgpt.sessions.HTTPTLSSession.cookies">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cookies</span></span><a class="headerlink" href="#chatgpt.sessions.HTTPTLSSession.cookies" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chatgpt.sessions.HTTPTLSSession.request">
+<span class="sig-name descname"><span class="pre">request</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">headers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/chatgpt/sessions.html#HTTPTLSSession.request"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chatgpt.sessions.HTTPTLSSession.request" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-chatgpt.utils">
+<span id="chatgpt-utils-module"></span><h2>chatgpt.utils module<a class="headerlink" href="#module-chatgpt.utils" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="chatgpt.utils.get_utc_now_datetime">
+<span class="sig-prename descclassname"><span class="pre">chatgpt.utils.</span></span><span class="sig-name descname"><span class="pre">get_utc_now_datetime</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/chatgpt/utils.html#get_utc_now_datetime"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chatgpt.utils.get_utc_now_datetime" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="chatgpt.utils.random_sleep_time">
+<span class="sig-prename descclassname"><span class="pre">chatgpt.utils.</span></span><span class="sig-name descname"><span class="pre">random_sleep_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">min_second</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_second</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/chatgpt/utils.html#random_sleep_time"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chatgpt.utils.random_sleep_time" title="Permalink to this definition"></a></dt>
+<dd><p>Random sleep time</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>min_second</strong> (<em>float</em>) – Minimun range to generate.</p></li>
+<li><p><strong>max_second</strong> (<em>float</em>) – Maximun range to generate.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-chatgpt">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-chatgpt" title="Permalink to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Rodrigo Martínez, Alejandro Suárez.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
