@@ -12,11 +12,6 @@
 
 
 ## Install or update
-### New version 2.2214
-```bash
-pip install -U git+https://github.com/labteral/chatgpt-python.git
-```
-### Previous version 1.2212.2
 ```bash
 pip install -U chatgpt
 ```
