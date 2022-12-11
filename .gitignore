@@ -1,9 +1,12 @@
 # Custom
 .dccache
 config.json
+config*
 .vscode
+.chatgpt
 cli.py
 main.py
+_docs/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>chatgpt.chatgpt &mdash; ChatGPT Python SDK  documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> ChatGPT Python SDK
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">ChatGPT Python SDK</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">chatgpt.chatgpt</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for chatgpt.chatgpt</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">from</span> <span class="nn">requests</span> <span class="kn">import</span> <span class="n">HTTPError</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+<span class="kn">from</span> <span class="nn">uuid</span> <span class="kn">import</span> <span class="n">uuid4</span> <span class="k">as</span> <span class="n">uuid</span>
+
+<span class="kn">from</span> <span class="nn">chatgpt.authentication</span> <span class="kn">import</span> <span class="n">OpenAIAuthentication</span>
+<span class="kn">from</span> <span class="nn">chatgpt.sessions</span> <span class="kn">import</span> <span class="n">HTTPSession</span><span class="p">,</span> <span class="n">HTTPTLSSession</span>
+<span class="kn">from</span> <span class="nn">chatgpt.utils</span> <span class="kn">import</span> <span class="n">get_utc_now_datetime</span>
+<span class="kn">from</span> <span class="nn">.errors</span> <span class="kn">import</span> <span class="n">ChatgptError</span><span class="p">,</span> <span class="n">ChatgptErrorCodes</span>
+<span class="kn">from</span> <span class="nn">tls_client.sessions</span> <span class="kn">import</span> <span class="n">TLSClientExeption</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+
+<div class="viewcode-block" id="Conversation"><a class="viewcode-back" href="../../chatgpt.html#chatgpt.chatgpt.Conversation">[docs]</a><span class="k">class</span> <span class="nc">Conversation</span><span class="p">:</span>
+
+    <span class="n">DEFAULT_MODEL_NAME</span> <span class="o">=</span> <span class="s2">&quot;text-davinci-002-render&quot;</span>
+    <span class="n">DEFAULT_CONFIG_PATH</span> <span class="o">=</span> <span class="s2">&quot;config.json&quot;</span>
+    <span class="n">DEFAULT_CACHE_PATH</span> <span class="o">=</span> <span class="s2">&quot;.chatgpt&quot;</span>
+    <span class="n">DEFAULT_ACCESS_TOKEN_SECONDS_TO_EXPIRE</span> <span class="o">=</span> <span class="mi">1800</span>
+    <span class="n">DEFAULT_ENVIRONMENT_CHATGPT_HOME</span> <span class="o">=</span> <span class="s2">&quot;CHATGPT_HOME&quot;</span>
+    <span class="n">__environment</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">DEFAULT_ENVIRONMENT_CHATGPT_HOME</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">__environment</span><span class="p">:</span>
+        <span class="n">__environment</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">__environment</span><span class="p">)</span><span class="o">.</span><span class="n">absolute</span><span class="p">())</span>
+        <span class="n">DEFAULT_CACHE_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">__environment</span><span class="p">,</span> <span class="n">DEFAULT_CACHE_PATH</span><span class="p">)</span>
+        <span class="n">DEFAULT_CONFIG_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">__environment</span><span class="p">,</span> <span class="n">DEFAULT_CONFIG_PATH</span><span class="p">)</span>
+
+    <span class="n">_email</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_password</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="n">_access_token</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_access_token_seconds_to_expire</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">DEFAULT_ACCESS_TOKEN_SECONDS_TO_EXPIRE</span>
+    <span class="n">_access_token_expire</span><span class="p">:</span> <span class="n">datetime</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_chatgpt_session_expire</span><span class="p">:</span> <span class="n">datetime</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="n">_conversation_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_parent_message_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_model_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">DEFAULT_MODEL_NAME</span>
+
+    <span class="n">_config_path</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_cache_file_path</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_cache_file</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="n">_tls_session</span><span class="p">:</span> <span class="n">HTTPTLSSession</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_openai_authentication</span><span class="p">:</span> <span class="n">OpenAIAuthentication</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_cookies</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">_proxy</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_timeout</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="n">_default_file_config</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;conversation_id&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;parent_message_id&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;access_token&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;email&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;password&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">config_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">access_token</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">access_token_seconds_to_expire</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">email</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">password</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">conversation_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">parent_message_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">proxy</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">timeout</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">cache_file</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">cache_file_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Args:</span>
+<span class="sd">            config_path (str, optional): Configuration path from where information is going to be loaded. If a path is provided it will load the configuration into the attributes of Conversation. Defaults to None.</span>
+<span class="sd">            access_token (str, optional): Access token used to authenticate into openai chatbot. Defaults to None.</span>
+<span class="sd">            email (str): Email address. Defaults to None.</span>
+<span class="sd">            password (str): Password. Defaults to None.</span>
+<span class="sd">            conversation_id (str, optional): Conversation id with which the conversation starts. Defaults to None.</span>
+<span class="sd">            parent_message_id (str, optional): Parent id with which the conversation starts. Defaults to None.</span>
+<span class="sd">            proxy (str, optional): Proxy to use for requests. Defaults to None.</span>
+<span class="sd">            timeout (int, optional): Timeout duration in seconds.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">config_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">load_config</span><span class="p">(</span><span class="n">config_path</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">DEFAULT_CONFIG_PATH</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">load_config</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">DEFAULT_CONFIG_PATH</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">cache_file_path</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache_file_path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_cache_file_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DEFAULT_CACHE_PATH</span>
+
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cache_file_path</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">load_config</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cache_file_path</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">access_token</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_access_token</span> <span class="o">=</span> <span class="n">access_token</span>
+
+        <span class="k">if</span> <span class="n">email</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_email</span> <span class="o">=</span> <span class="n">email</span>
+
+        <span class="k">if</span> <span class="n">password</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_password</span> <span class="o">=</span> <span class="n">password</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_conversation_id</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_conversation_id</span> <span class="o">=</span> <span class="n">conversation_id</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parent_message_id</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_parent_message_id</span> <span class="o">=</span> <span class="n">parent_message_id</span>
+
+        <span class="k">if</span> <span class="n">cache_file</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_cache_file</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="k">if</span> <span class="n">proxy</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_proxy</span> <span class="o">=</span> <span class="n">proxy</span>
+
+        <span class="k">if</span> <span class="n">timeout</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span> <span class="o">=</span> <span class="n">timeout</span>
+
+        <span class="k">if</span> <span class="n">access_token_seconds_to_expire</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_access_token_seconds_to_expire</span> <span class="o">=</span> <span class="n">access_token_seconds_to_expire</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tls_session</span> <span class="o">=</span> <span class="n">HTTPTLSSession</span><span class="p">(</span>
+            <span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span><span class="p">,</span> <span class="n">proxy</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_proxy</span><span class="p">,</span> <span class="n">cookies</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_cookies</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_session</span> <span class="o">=</span> <span class="n">HTTPSession</span><span class="p">(</span>
+            <span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span><span class="p">,</span> <span class="n">proxy</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_proxy</span><span class="p">,</span> <span class="n">cookies</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_cookies</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_openai_authentication</span> <span class="o">=</span> <span class="n">OpenAIAuthentication</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tls_session</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__remove_none_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">d</span>
+        <span class="n">new_dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">new_dict</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__remove_none_values</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">new_dict</span>
+
+    <span class="k">def</span> <span class="nf">_set_access_token_expiration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seconds</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set an expiration time for the access_token..</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            days (int): Days for token expiration.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">seconds</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">seconds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_access_token_seconds_to_expire</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_access_token_expire</span> <span class="o">=</span> <span class="n">get_utc_now_datetime</span><span class="p">()</span> <span class="o">+</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="n">seconds</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_process_chatgpt_session</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">session_info</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">session_info</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="s2">&quot;accessToken&quot;</span> <span class="ow">in</span> <span class="n">session_info</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_access_token</span> <span class="o">=</span> <span class="n">session_info</span><span class="p">[</span><span class="s2">&quot;accessToken&quot;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_cookies</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tls_session</span><span class="o">.</span><span class="n">cookies</span>
+            <span class="k">if</span> <span class="s2">&quot;.&quot;</span> <span class="ow">in</span> <span class="n">session_info</span><span class="p">[</span><span class="s2">&quot;expires&quot;</span><span class="p">]:</span>
+                <span class="n">session_info</span><span class="p">[</span><span class="s2">&quot;expires&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">session_info</span><span class="p">[</span><span class="s2">&quot;expires&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span>
+                    <span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;+00:00&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_chatgpt_session_expire</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">fromisoformat</span><span class="p">(</span>
+                <span class="n">session_info</span><span class="p">[</span><span class="s2">&quot;expires&quot;</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_set_access_token_expiration</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">write_cache</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">session_info</span>
+        <span class="k">raise</span> <span class="n">ChatgptError</span><span class="p">(</span><span class="s2">&quot;Failed obtaining the access token. Please retry.&quot;</span><span class="p">,</span>
+                           <span class="n">ChatgptErrorCodes</span><span class="o">.</span><span class="n">LOGIN_ERROR</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Conversation.login"><a class="viewcode-back" href="../../chatgpt.html#chatgpt.chatgpt.Conversation.login">[docs]</a>    <span class="k">def</span> <span class="nf">login</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">email</span><span class="p">,</span> <span class="n">password</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Login to the openai and return the token</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            email (str): Email to login into openai chatgpt</span>
+<span class="sd">            password (str): Password to login into openai chatgpt</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_email</span> <span class="o">=</span> <span class="n">email</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_password</span> <span class="o">=</span> <span class="n">password</span>
+        <span class="n">session_info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_openai_authentication</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="n">email</span><span class="p">,</span> <span class="n">password</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_process_chatgpt_session</span><span class="p">(</span><span class="n">session_info</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Conversation.get_session"><a class="viewcode-back" href="../../chatgpt.html#chatgpt.chatgpt.Conversation.get_session">[docs]</a>    <span class="k">def</span> <span class="nf">get_session</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get chatgpt actual session</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">session_info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_openai_authentication</span><span class="o">.</span><span class="n">get_session</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_process_chatgpt_session</span><span class="p">(</span><span class="n">session_info</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Conversation.load_config"><a class="viewcode-back" href="../../chatgpt.html#chatgpt.chatgpt.Conversation.load_config">[docs]</a>    <span class="k">def</span> <span class="nf">load_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">DEFAULT_CONFIG_PATH</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Load Conversation attributes by reading from a file</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            config_path (str, optional): Name of the file from where to read attributes from. Defaults to config.json.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">config_path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">config_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DEFAULT_CONFIG_PATH</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">config_path</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_config_path</span> <span class="o">=</span> <span class="n">config_path</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">config</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">config_path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                    <span class="n">config</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">))</span>
+
+                <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;access_token_expiration&quot;</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">_access_token_expire</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">fromisoformat</span><span class="p">(</span>
+                                <span class="n">value</span><span class="p">)</span>
+                        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;chatgpt_session_expire&quot;</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">_chatgpt_session_expire</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">fromisoformat</span><span class="p">(</span>
+                                <span class="n">value</span><span class="p">)</span>
+                        <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="p">)):</span>
+                            <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="p">),</span> <span class="n">value</span><span class="p">)</span>
+
+                <span class="k">return</span> <span class="n">config</span>
+
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">ChatgptError</span><span class="p">(</span><span class="s2">&quot;Error loading the configuration file in </span><span class="se">\&quot;</span><span class="si">{}</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_config_path</span><span class="p">),</span>
+                                   <span class="n">ChatgptErrorCodes</span><span class="o">.</span><span class="n">CONFIG_FILE_ERROR</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span></div>
+
+<div class="viewcode-block" id="Conversation.write_cache"><a class="viewcode-back" href="../../chatgpt.html#chatgpt.chatgpt.Conversation.write_cache">[docs]</a>    <span class="k">def</span> <span class="nf">write_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cache_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Write the conversation attributes inside a file.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            cache_path (str, optional): Path where to write the data for caching purposes. Defaults to .chatgpt.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache_file</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache_file_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+
+            <span class="k">if</span> <span class="n">cache_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_cache_file_path</span> <span class="o">=</span> <span class="n">cache_path</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">access_token_expiration</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="n">chatgpt_session_expiration</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_access_token_expire</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">access_token_expiration</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_access_token_expire</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_chatgpt_session_expire</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">chatgpt_session_expiration</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_chatgpt_session_expire</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
+
+                <span class="n">config</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s2">&quot;conversation_id&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_conversation_id</span><span class="p">,</span>
+                    <span class="s2">&quot;parent_message_id&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parent_message_id</span><span class="p">,</span>
+                    <span class="s2">&quot;cookies&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cookies</span><span class="p">,</span>
+                    <span class="s2">&quot;access_token&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_access_token</span><span class="p">,</span>
+                    <span class="s2">&quot;access_token_expiration&quot;</span><span class="p">:</span> <span class="n">access_token_expiration</span><span class="p">,</span>
+                    <span class="s2">&quot;chatgpt_session_expire&quot;</span><span class="p">:</span> <span class="n">chatgpt_session_expiration</span>
+                <span class="p">}</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cache_file_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                    <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">ChatgptError</span><span class="p">(</span><span class="s2">&quot;Error writing the configuration file&quot;</span><span class="p">,</span>
+                                   <span class="n">ChatgptErrorCodes</span><span class="o">.</span><span class="n">CONFIG_FILE_ERROR</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span></div>
+
+<div class="viewcode-block" id="Conversation.stream"><a class="viewcode-back" href="../../chatgpt.html#chatgpt.chatgpt.Conversation.stream">[docs]</a>    <span class="k">def</span> <span class="nf">stream</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">retry_on_401</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">only_new_characters</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Generator that allows you to retrieve messages as you are receiving them.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            message (List[str]): Message or list of messages to send to the server.</span>
+<span class="sd">            retry_on_401 (bool, optional): Retry login if it fails. Defaults to True.</span>
+
+<span class="sd">        Yields:</span>
+<span class="sd">            str: The text of the message as you are receiving it.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">stream_text_result</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">chunk_buffer</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">chat</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">retry_on_401</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">iter_content</span><span class="p">(</span><span class="n">chunk_size</span><span class="o">=</span><span class="mi">1024</span><span class="p">):</span>
+            <span class="n">chunk_buffer</span> <span class="o">+=</span> <span class="n">chunk</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;data: &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="n">chunk_arr</span> <span class="o">=</span> <span class="n">chunk_buffer</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;}</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">chunk_arr</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;}</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">):</span>
+                <span class="n">chunk_buffer</span> <span class="o">=</span> <span class="n">chunk_arr</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">len_arr</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">chunk_arr</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">len_arr</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">chunk_arr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;[DONE]&quot;</span><span class="p">:</span>
+                    <span class="k">break</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">len_arr</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+                        <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">chunk_arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;}&quot;</span><span class="p">)</span>
+                        <span class="n">message</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;message&quot;</span><span class="p">]</span>
+                        <span class="n">parts</span> <span class="o">=</span> <span class="n">message</span><span class="p">[</span><span class="s2">&quot;content&quot;</span><span class="p">][</span><span class="s2">&quot;parts&quot;</span><span class="p">]</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_parent_message_id</span> <span class="o">=</span> <span class="n">message</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_conversation_id</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;conversation_id&quot;</span><span class="p">]</span>
+                        <span class="k">if</span> <span class="n">parts</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="n">only_new_characters</span><span class="p">:</span>
+                                <span class="k">yield</span> <span class="n">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">stream_text_result</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="k">yield</span> <span class="n">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                            <span class="n">stream_text_result</span> <span class="o">=</span> <span class="n">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="k">pass</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">write_cache</span><span class="p">()</span>
+        <span class="k">return</span></div>
+
+<div class="viewcode-block" id="Conversation.chat"><a class="viewcode-back" href="../../chatgpt.html#chatgpt.chatgpt.Conversation.chat">[docs]</a>    <span class="k">def</span> <span class="nf">chat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">retry_on_401</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">direct_response</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Send a message and wait for the server to fully answer to return the message.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            message (List[str]): Message or list of messages to send to the server.</span>
+<span class="sd">            retry_on_401 (bool, optional): Retry login if it fails. Defaults to True.</span>
+<span class="sd">            direct_response (bool, optional): Return the response of request instead of the parsed message. Defaults to False.</span>
+<span class="sd">            stream (bool, optional): Execute chat with stream. Note that you will be better off by using stream since it does the processing for you. Defaults to False.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parent_message_id</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_parent_message_id</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="p">())</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="p">[</span><span class="n">message</span><span class="p">]</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_access_token_expire</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_access_token_expire</span> <span class="o">&lt;</span> <span class="n">get_utc_now_datetime</span><span class="p">():</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">get_session</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_access_token</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cookies</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_chatgpt_session_expire</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_chatgpt_session_expire</span> <span class="o">&gt;</span> <span class="n">get_utc_now_datetime</span><span class="p">():</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">get_session</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_access_token</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_email</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_password</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_email</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_password</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_access_token</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">ChatgptError</span><span class="p">(</span>
+                    <span class="s2">&quot;No access token. Please, provide an access_token or email and password through the constructor/config file.&quot;</span><span class="p">,</span> <span class="n">ChatgptErrorCodes</span><span class="o">.</span><span class="n">INVALID_ACCESS_TOKEN</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_message_id</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="p">())</span>
+
+            <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://chat.openai.com/backend-api/conversation&quot;</span>
+            <span class="n">payload</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;next&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;messages&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="p">{</span>
+                        <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_message_id</span><span class="p">,</span>
+                        <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;content_type&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;parts&quot;</span><span class="p">:</span> <span class="n">message</span>
+                        <span class="p">}</span>
+                    <span class="p">}</span>
+                <span class="p">],</span>
+                <span class="s2">&quot;conversation_id&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_conversation_id</span><span class="p">,</span>
+                <span class="s2">&quot;parent_message_id&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parent_message_id</span><span class="p">,</span>
+                <span class="s2">&quot;model&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model_name</span>
+            <span class="p">}</span>
+            <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;Authorization&quot;</span><span class="p">:</span> <span class="s2">&quot;Bearer </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_access_token</span><span class="p">),</span>
+                <span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">,</span>
+            <span class="p">}</span>
+            <span class="n">payload</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__remove_none_values</span><span class="p">(</span><span class="n">payload</span><span class="p">))</span>
+
+            <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_session</span><span class="o">.</span><span class="n">request</span><span class="p">(</span>
+                <span class="s2">&quot;POST&quot;</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">payload</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="n">stream</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">direct_response</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">response</span>
+
+            <span class="n">payload</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span>
+            <span class="n">last_item</span> <span class="o">=</span> <span class="n">payload</span><span class="o">.</span><span class="n">split</span><span class="p">((</span><span class="s2">&quot;data:&quot;</span><span class="p">))[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">last_item</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_parent_message_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_message_id</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_conversation_id</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;conversation_id&quot;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">write_cache</span><span class="p">()</span>
+            <span class="n">text_items</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;message&quot;</span><span class="p">][</span><span class="s2">&quot;content&quot;</span><span class="p">][</span><span class="s2">&quot;parts&quot;</span><span class="p">]</span>
+            <span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">text_items</span><span class="p">)</span>
+            <span class="n">postprocessed_text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\n+&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">postprocessed_text</span>
+
+        <span class="k">except</span> <span class="n">HTTPError</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
+            <span class="n">exception_message</span> <span class="o">=</span> <span class="s2">&quot;Unknown error&quot;</span>
+            <span class="n">exception_code</span> <span class="o">=</span> <span class="n">ChatgptErrorCodes</span><span class="o">.</span><span class="n">UNKNOWN_ERROR</span>
+            <span class="n">error_code</span> <span class="o">=</span> <span class="n">ex</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span>
+            <span class="n">reason</span> <span class="o">=</span> <span class="n">ex</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">content</span>
+            <span class="k">if</span> <span class="n">error_code</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">401</span><span class="p">,</span> <span class="mi">409</span><span class="p">]:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_access_token</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="k">if</span> <span class="n">retry_on_401</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_email</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_password</span><span class="p">):</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_email</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_password</span><span class="p">)</span>
+                        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">chat</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+                <span class="n">exception_message</span> <span class="o">=</span> <span class="s2">&quot;Please, provide a new access_token through the constructor, by loading the configuration file with a proper access_token or instead, you can provide an email and password.&quot;</span>
+                <span class="n">exception_code</span> <span class="o">=</span> <span class="n">ChatgptErrorCodes</span><span class="o">.</span><span class="n">INVALID_ACCESS_TOKEN</span>
+
+            <span class="k">elif</span> <span class="n">error_code</span> <span class="o">==</span> <span class="mi">403</span><span class="p">:</span>
+                <span class="n">exception_message</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">reason</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span>
+                    <span class="s2">&quot;h2&gt;&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;&lt;&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+            <span class="k">elif</span> <span class="n">error_code</span> <span class="o">==</span> <span class="mi">500</span><span class="p">:</span>
+                <span class="n">exception_message</span> <span class="o">=</span> <span class="n">reason</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">exception_message</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">reason</span><span class="p">)[</span><span class="s2">&quot;detail&quot;</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="n">error_code</span> <span class="o">==</span> <span class="mi">429</span><span class="p">:</span>
+                        <span class="n">exception_message</span> <span class="o">=</span> <span class="n">exception_message</span> <span class="o">+</span> \
+                            <span class="s2">&quot;. You may need to reset the actual conversation.&quot;</span>
+                <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                    <span class="n">exception_message</span> <span class="o">=</span> <span class="n">reason</span>
+
+        <span class="k">except</span> <span class="n">ChatgptError</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
+            <span class="n">exception_message</span> <span class="o">=</span> <span class="n">ex</span><span class="o">.</span><span class="n">message</span>
+            <span class="n">exception_code</span> <span class="o">=</span> <span class="n">ex</span><span class="o">.</span><span class="n">code</span>
+            <span class="k">if</span> <span class="n">exception_code</span> <span class="o">==</span> <span class="n">ChatgptErrorCodes</span><span class="o">.</span><span class="n">LOGIN_ERROR</span> <span class="ow">or</span> <span class="n">exception_code</span> <span class="o">==</span> <span class="n">ChatgptErrorCodes</span><span class="o">.</span><span class="n">TIMEOUT_ERROR</span> <span class="ow">and</span> <span class="n">retry_on_401</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">chat</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">direct_response</span><span class="o">=</span><span class="n">direct_response</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="n">stream</span><span class="p">)</span>
+
+        <span class="k">except</span> <span class="n">TLSClientExeption</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
+            <span class="n">exception_message</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">ex</span><span class="p">)</span>
+            <span class="n">exception_code</span> <span class="o">=</span> <span class="n">ChatgptErrorCodes</span><span class="o">.</span><span class="n">TIMEOUT_ERROR</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">exception_message</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+            <span class="n">exception_code</span> <span class="o">=</span> <span class="n">ChatgptErrorCodes</span><span class="o">.</span><span class="n">UNKNOWN_ERROR</span>
+
+        <span class="k">raise</span> <span class="n">ChatgptError</span><span class="p">(</span>
+            <span class="n">exception_message</span><span class="p">,</span> <span class="n">exception_code</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Conversation.reset"><a class="viewcode-back" href="../../chatgpt.html#chatgpt.chatgpt.Conversation.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Reset the conversation</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_message_id</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_parent_message_id</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_conversation_id</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">write_cache</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Conversation.clean_auth"><a class="viewcode-back" href="../../chatgpt.html#chatgpt.chatgpt.Conversation.clean_auth">[docs]</a>    <span class="k">def</span> <span class="nf">clean_auth</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Clean the current authentication information</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_access_token</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cookies</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_access_token</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_chatgpt_session_expire</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_access_token_expire</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">write_cache</span><span class="p">()</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Rodrigo Martínez, Alejandro Suárez.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

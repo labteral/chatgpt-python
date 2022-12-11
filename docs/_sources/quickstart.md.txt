@@ -77,14 +77,8 @@ These are the available commands:
 - `clear`: clear the terminal.
 - `exit`: exit the CLI.
 
+
 <br/>
-
-<div style="padding:0.2em;padding-top:0">
-
-![](img/cli_example.gif)
-
-</div>
-<br>
 
 ### SDK
 ```python
@@ -131,7 +125,7 @@ except ChatgptError as chatgpt_error:
 ```
 
 
-#### **Chatgpt Error codes:**
+#### **Chatgpt Error codes (Generated with chatgpt):**
 
 - `INVALID_ACCESS_TOKEN`: This error code indicates that the access token provided to the chatbot's API is not valid or has expired.
 - `CHATGPT_API_ERROR`: This error code indicates that an error has occurred while making a request to the chatbot's API.

@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Install or update &mdash; ChatGPT Python SDK  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> ChatGPT Python SDK
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">Install or update</a></li>
+<li><a class="reference internal" href="#config">Config</a><ul>
+<li><a class="reference internal" href="#create-a-file-with-your-credentials">Create a file with your credentials</a></li>
+<li><a class="reference internal" href="#with-proxy">With proxy</a></li>
+<li><a class="reference internal" href="#with-other-parameters">With other parameters</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#environment-variable">Environment variable</a></li>
+<li><a class="reference internal" href="#usage">Usage</a><ul>
+<li><a class="reference internal" href="#cli">CLI</a></li>
+<li><a class="reference internal" href="#sdk">SDK</a><ul>
+<li><a class="reference internal" href="#exceptions"><strong>Exceptions</strong>:</a></li>
+<li><a class="reference internal" href="#chatgpt-error-codes-generated-with-chatgpt"><strong>Chatgpt Error codes (Generated with chatgpt):</strong></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ChatGPT Python SDK</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active">Install or update</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/quickstart.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1 align="center">ChatGPT Python SDK</h1>
+<p align="center">
+    Library that allows developers to easily integrate the ChatGPT into their Python projects.
+    <br />
+    <br />
+</p>
+<p align="center">
+    <a href="https://github.com/labteral/chatgpt-python/issues"><img alt="PyPi" src="https://img.shields.io/github/issues/labteral/chatgpt-python.svg?style=flat-square"></a>
+    <a href="https://pypi.python.org/pypi/chatgpt/"><img alt="PyPi" src="https://img.shields.io/pypi/v/chatgpt.svg?style=flat-square"></a>
+    <a href="https://github.com/labteral/chatgpt-python/blob/master/LICENSE"><img alt="License" src="https://img.shields.io/github/license/labteral/chatgpt-python.svg?style=flat-square"></a>
+</p>
+<section id="install-or-update">
+<h1>Install or update<a class="headerlink" href="#install-or-update" title="Permalink to this heading"></a></h1>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install -U chatgpt
+</pre></div>
+</div>
+</section>
+<section id="config">
+<h1>Config<a class="headerlink" href="#config" title="Permalink to this heading"></a></h1>
+<section id="create-a-file-with-your-credentials">
+<h2>Create a file with your credentials<a class="headerlink" href="#create-a-file-with-your-credentials" title="Permalink to this heading"></a></h2>
+<p>Create the file <code class="docutils literal notranslate"><span class="pre">config.json</span></code> in your working directory:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;email&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;email@example.org&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;password&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;xxx&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="with-proxy">
+<h2>With proxy<a class="headerlink" href="#with-proxy" title="Permalink to this heading"></a></h2>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;email&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;email@example.org&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;password&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;xxx&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;proxy&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;socks5://user:pass@host:port&quot;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="with-other-parameters">
+<h2>With other parameters<a class="headerlink" href="#with-other-parameters" title="Permalink to this heading"></a></h2>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;email&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;email@example.org&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;password&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;xxx&quot;</span><span class="p">,</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">// Timeout per request.</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;timeout&quot;</span><span class="p">:</span><span class="mi">300</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c1">// Cache for saving the cookies and the state of the session.</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;cache_file_path&quot;</span><span class="p">:</span><span class="s2">&quot;/path/filename&quot;</span><span class="p">,</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">// Time for refresh the access token.</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;access_token_seconds_to_expire&quot;</span><span class="p">:</span><span class="mi">1800</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="environment-variable">
+<h1>Environment variable<a class="headerlink" href="#environment-variable" title="Permalink to this heading"></a></h1>
+<p>You can specify the default configuration folder for chatgpt by setting the <code class="docutils literal notranslate"><span class="pre">CHATGPT_HOME</span></code> environment variable to the desired directory path.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">CHATGPT_HOME</span><span class="o">=</span><span class="s2">&quot;/home/</span><span class="nv">$USER</span><span class="s2">/.config/chatgpt&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="usage">
+<h1>Usage<a class="headerlink" href="#usage" title="Permalink to this heading"></a></h1>
+<section id="cli">
+<h2>CLI<a class="headerlink" href="#cli" title="Permalink to this heading"></a></h2>
+<p>You can launch the CLI with:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>chatgpt
+</pre></div>
+</div>
+<p>or</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python -m chatgpt
+</pre></div>
+</div>
+<p>These are the available commands:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">reset</span></code>: forget the context of the current conversation.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">clear</span></code>: clear the terminal.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">exit</span></code>: exit the CLI.</p></li>
+</ul>
+<br/>
+</section>
+<section id="sdk">
+<h2>SDK<a class="headerlink" href="#sdk" title="Permalink to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">chatgpt</span> <span class="kn">import</span> <span class="n">Conversation</span>
+
+<span class="n">conversation</span> <span class="o">=</span> <span class="n">Conversation</span><span class="p">()</span>
+
+<span class="c1"># Stream the message as it arrives.</span>
+<span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">conversation</span><span class="o">.</span><span class="n">stream</span><span class="p">(</span><span class="s2">&quot;We are going to start a conversation. I will speak English and you will speak Portuguese.&quot;</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">chunk</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+
+<span class="c1"># Wait until the message is fully received.</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">conversation</span><span class="o">.</span><span class="n">chat</span><span class="p">(</span><span class="s2">&quot;What&#39;s the color of the sky?&quot;</span><span class="p">))</span>
+
+<span class="c1"># The AI will forget it was speaking Portuguese</span>
+<span class="n">conversation</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">conversation</span><span class="o">.</span><span class="n">chat</span><span class="p">(</span><span class="s2">&quot;What&#39;s the color of the sun?&quot;</span><span class="p">))</span>
+
+</pre></div>
+</div>
+<blockquote>
+<div><p>it is recommended to use <em>stream</em> instead of <em>chat</em>.</p>
+</div></blockquote>
+<section id="exceptions">
+<h3><strong>Exceptions</strong>:<a class="headerlink" href="#exceptions" title="Permalink to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">chatgpt</span> <span class="kn">import</span> <span class="n">ChatgptError</span><span class="p">,</span> <span class="n">ChatgptErrorCodes</span>
+
+<span class="k">try</span><span class="p">:</span>
+
+    <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">conversation</span><span class="o">.</span><span class="n">stream</span><span class="p">(</span><span class="s2">&quot;Hello, world!&quot;</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">chunk</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+
+<span class="k">except</span> <span class="n">ChatgptError</span> <span class="k">as</span> <span class="n">chatgpt_error</span><span class="p">:</span>
+
+    <span class="n">message</span> <span class="o">=</span> <span class="n">chatgpt_error</span><span class="o">.</span><span class="n">message</span>
+    <span class="n">code</span> <span class="o">=</span> <span class="n">chatgpt_error</span><span class="o">.</span><span class="n">code</span>
+
+    <span class="k">if</span> <span class="n">code</span> <span class="o">==</span> <span class="n">ChatgptErrorCodes</span><span class="o">.</span><span class="n">INVALID_ACCESS_TOKEN</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Invalid token&quot;</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</section>
+<section id="chatgpt-error-codes-generated-with-chatgpt">
+<h3><strong>Chatgpt Error codes (Generated with chatgpt):</strong><a class="headerlink" href="#chatgpt-error-codes-generated-with-chatgpt" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">INVALID_ACCESS_TOKEN</span></code>: This error code indicates that the access token provided to the chatbot’s API is not valid or has expired.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CHATGPT_API_ERROR</span></code>: This error code indicates that an error has occurred while making a request to the chatbot’s API.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CONFIG_FILE_ERROR</span></code>: This error code indicates that there is a problem with the configuration file for the chatbot.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">UNKNOWN_ERROR</span></code>: This error code is used when the cause of the error is unknown or cannot be determined.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">LOGIN_ERROR</span></code>: This error code indicates that there was a problem with the login process, such as an incorrect username or password.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TIMEOUT_ERROR</span></code>: This error code indicates that a request to the chatbot’s API has timed out.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CONNECTION_ERROR</span></code>: This error code indicates that there is a problem with the connection to the chatbot’s API.</p></li>
+</ul>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Rodrigo Martínez, Alejandro Suárez.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
