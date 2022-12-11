@@ -41,14 +41,8 @@ Create the file `config.json` in your working directory:
 {
     "email": "email@example.org",
     "password": "xxx",
-
-    // Timeout per request.
     "timeout":300,
-    
-    // Cache for saving the cookies and the state of the session.
     "cache_file_path":"/path/filename",
-
-    // Time for refresh the access token.
     "access_token_seconds_to_expire":1800
 }
 ```
