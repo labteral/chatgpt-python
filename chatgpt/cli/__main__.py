@@ -27,7 +27,7 @@ def _rendering(response, **args):
                     live.update(markdown)
                     live.refresh()
                 live.refresh()
-        console.clear()
+        # console.clear()
     except KeyboardInterrupt:
         response.close()
     console.print(Markdown(last_response,  code_theme=theme, inline_code_theme=theme, inline_code_lexer="Python" ))

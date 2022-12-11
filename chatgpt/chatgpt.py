@@ -153,6 +153,8 @@ class Conversation:
         if session_info is not None and "accessToken" in session_info:
             self._access_token = session_info["accessToken"]
             self._cookies = self._tls_session.cookies
+            if "." in session_info["expires"]:
+                session_info["expires"] = session_info["expires"].split(".")[0]+"+00:00"
             self._chatgpt_session_expire = datetime.fromisoformat(session_info["expires"])
             self._set_access_token_expiration()
             self.write_cache()
