@@ -3,4 +3,4 @@
 
 from .chatgpt import *
 
-__version__ = '1.2212.1'
+__version__ = '2.2212.0'
