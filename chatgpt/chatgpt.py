@@ -404,8 +404,9 @@ class Conversation:
                 self._cookies = {}
                 self._session._cookies = {}
                 self._access_token = None
+                self.write_cache()
                 return self.chat(message, False, direct_response=direct_response, stream=stream)
-            elif exception_code == ChatgptErrorCodes.LOGIN_ERROR or exception_code == ChatgptErrorCodes.TIMEOUT_ERROR and retry_on_401:
+            elif (exception_code == ChatgptErrorCodes.LOGIN_ERROR or exception_code == ChatgptErrorCodes.TIMEOUT_ERROR) and retry_on_401:
                 return self.chat(message, False, direct_response=direct_response, stream=stream)
 
         except TLSClientExeption as ex:
