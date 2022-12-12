@@ -13,7 +13,7 @@
 
 ## Install or update
 ```bash
-pip3 install -U git+https://github.com/labteral/chatgpt-python.git
+pip install -U chatgpt
 ```
 
 ## Config
