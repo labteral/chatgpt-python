@@ -309,7 +309,7 @@ class Conversation:
             message = [message]
         try:
             if self._access_token_expire is not None:
-                if self._access_token_expire < get_utc_now_datetime():
+                if self._access_token_expire < get_utc_now_datetime() and self._chatgpt_session_expire > get_utc_now_datetime():
                     self.get_session()
 
             if self._access_token is None:
@@ -398,7 +398,14 @@ class Conversation:
         except ChatgptError as ex:
             exception_message = ex.message
             exception_code = ex.code
-            if exception_code == ChatgptErrorCodes.LOGIN_ERROR or exception_code == ChatgptErrorCodes.TIMEOUT_ERROR and retry_on_401:
+            if exception_code == ChatgptErrorCodes.SESSION_ERROR:
+                self._chatgpt_session_expire = get_utc_now_datetime()
+                self._tls_session._cookies = {}
+                self._cookies = {}
+                self._session._cookies = {}
+                self._access_token = None
+                return self.chat(message, False, direct_response=direct_response, stream=stream)
+            elif exception_code == ChatgptErrorCodes.LOGIN_ERROR or exception_code == ChatgptErrorCodes.TIMEOUT_ERROR and retry_on_401:
                 return self.chat(message, False, direct_response=direct_response, stream=stream)
 
         except TLSClientExeption as ex:

@@ -123,7 +123,7 @@ class OpenAIAuthentication:
         except HTTPTLSError as e:
             raise ChatgptError(
                 "Error getting the session. You may have a wrong access token; try to login again or insert an access_token yourself.",
-                ChatgptErrorCodes.LOGIN_ERROR) from e
+                ChatgptErrorCodes.SESSION_ERROR) from e
 
     def login(self, username, password):
         """Get the access token for chatgpt
