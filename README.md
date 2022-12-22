@@ -23,7 +23,7 @@ Create the file `config.json` in your working directory:
 ```json
 {
     "email": "email@example.org",
-    "password": "xxx",
+    "password": "xxx"
 }
 ```
 
